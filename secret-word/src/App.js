@@ -26,6 +26,10 @@ function App() {
   const [pickedWord, setPickedWord] = useState("");
   const [pickedCategory, setPickedCategory] = useState("");
   const [letters, setLetters] = useState([]);
+  const [guessedLetters, setGuessedLetters] = useState([]);
+  const [wrongLetters, setWrongLetters] = useState([]);
+  const [guesses, setGuesses] = useState(3);
+  const [score, setScore] = useState(0);
 
   const pickAndCategory = () => {
     //pick a random category of words
@@ -45,7 +49,10 @@ function App() {
   const StartGame = () => {
     const { word, category } = pickAndCategory();
 
-    let wordletters = word.split();
+    let wordletters = "";
+    if (typeof word === "string") {
+      wordletters = word.split("");
+    }
 
     wordletters = wordletters.map((l) => l.toLowerCase());
 
@@ -57,9 +64,44 @@ function App() {
   };
 
   //process letter input
-  const verifyLetter = () => {
-    setGameStage(stages[2].name);
+  const verifyLetter = (letter) => {
+    const normalizedLetter = letter.toLowerCase();
+    //check if the letter is already been utilized
+    if (
+      guessedLetters.includes(normalizedLetter) ||
+      wrongLetters.includes(normalizedLetter)
+    ) {
+      return;
+    }
+
+    //push guessed letters or remove a chance
+    if (letters.includes(normalizedLetter)) {
+      //right letter
+      setGuessedLetters((actualGuessedLetters) => [
+        ...actualGuessedLetters,
+        normalizedLetter,
+      ]);
+    } else {
+      //wrong letter
+      setWrongLetters((actualWrongLetters) => [
+        ...actualWrongLetters,
+        normalizedLetter,
+      ]);
+      setGuesses((actualGuesses) => actualGuesses - 1);
+    }
+    console.log(guessedLetters);
+    console.log(wrongLetters);
   };
+  const clearLetterStates = () => {
+    setGuessedLetters([]);
+    setWrongLetters([]);
+  };
+  useEffect(() => {
+    if (guesses <= 0) {
+      clearLetterStates();
+      setGameStage(stages[2].name);
+    }
+  }, [guesses]);
 
   //restarts the game
   const retryGame = () => {
@@ -68,7 +110,18 @@ function App() {
   return (
     <div className="App">
       {gameStage == "start" && <StartScreen StartGame={StartGame} />}
-      {gameStage == "game" && <Game verifyLetter={verifyLetter} />}
+      {gameStage == "game" && (
+        <Game
+          verifyLetter={verifyLetter}
+          pickedWord={pickedWord}
+          pickedCategory={pickedCategory}
+          letters={letters}
+          guessedLetters={guessedLetters}
+          wrongLetters={wrongLetters}
+          guesses={guesses}
+          score={score}
+        />
+      )}
       {gameStage == "end" && <GameOver retryGame={retryGame} />}
     </div>
   );
