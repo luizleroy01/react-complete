@@ -1,0 +1,29 @@
+{
+    "products":[
+        {
+            "id":1,
+            "name":"camisa",
+            "price":59.9
+        },
+        {
+            "id":2,
+            "name":"calça",
+            "price":89.9
+        },
+        {
+            "id":3,
+            "name":"regata",
+            "price":29.9
+        },
+        {
+            "id":4,
+            "name":"boné",
+            "price":39.9
+        },
+        {
+            "id":5,
+            "name":"tênis",
+            "price":129.9
+        }
+    ]
+}
