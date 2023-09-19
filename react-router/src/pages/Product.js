@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams} from 'react-router-dom'
+import { useParams,Link} from 'react-router-dom'
 import {useEffect,useState} from 'react'
 
 const Product = () => {
@@ -18,10 +18,12 @@ const Product = () => {
     },[url])
   return (
     <div>
-        {product && <div key={id}>
+        {product && (
+            <div key={id}>
                 <h2>Nome:{product.name}</h2>
                 <p>Preço:{product.price}</p>
-            </div>
+                <Link to={`/products/${product.id}/info`}>Mais informações</Link>
+            </div>)
         }
     </div>
   )

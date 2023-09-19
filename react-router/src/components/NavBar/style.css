@@ -13,5 +13,11 @@ nav a:hover{
 }
 .active{
     background-color:black;
-    color:white;
+    color:white;    
+}
+.esta_ativo{
+    background-color:lime;
+}
+.nao_ativo{
+    background-color:red;
 }
